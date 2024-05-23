@@ -43,6 +43,19 @@ void removeFromQueue(ProcessQueue *queue, char *name) {
 }
 }
 
+void initializeQueue(ProcessQueue *queue) {
+    queue->count = 0;
+}
+
+Process dequeue(ProcessQueue *queue) {
+    Process process = queue->processes[0];
+    for (int i = 0; i < queue->count - 1; i++) {
+        queue->processes[i] = queue->processes[i + 1];
+    }
+    queue->count--;
+    return process;
+}
+
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {
