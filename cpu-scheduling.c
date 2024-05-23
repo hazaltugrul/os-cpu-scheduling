@@ -64,6 +64,26 @@ void ExecuteFCFS(ProcessQueue *cpu1_queue, FILE *output_file) {
  }
 }
 
+void executeRoundRobin(FILE *output_file, ProcessQueue *cpu2_queue, int quantum) {
+    int i = 0;
+    while (i < cpu2_queue->count) {
+        Process *process = &cpu2_queue->processes[i];
+        const char *queue_name = (quantum == 8) ? "que2" : "que3";
+        fprintf(output_file, "Process %s is placed in the %s queue to be assigned to CPU-2\n", process->name, queue_name);
+        fprintf(output_file, "Process %s is assigned to CPU-2.\n", process->name);
+
+        if (process->remaining_time > quantum) {
+            fprintf(output_file, "Process %s run until the defined quantum time (%d) and is queued again because the process is not completed.\n\n", process->name, quantum);
+            process->remaining_time -= quantum;
+            enqueue(cpu2_queue, *process);
+        } else {
+            process->remaining_time = 0;
+            fprintf(output_file, "Process %s is assigned to CPU-2, its operation is completed and terminated.\n\n", process->name);
+        }
+        i++;
+    }
+}
+
 void removeFromQueue(ProcessQueue *queue, char *name) {
     int found = 0;
     for (int i = 0; i < queue->count; i++) {
