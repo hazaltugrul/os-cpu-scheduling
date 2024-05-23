@@ -105,6 +105,19 @@ int main(int argc, char *argv[]) {
     }
 
     fclose(input_file);
+	
+	ExecuteFCFS(&cpu1_queue, output_file); 
+	
+	printf("CPU-1 que1(priority-0) (FCFS)â€º ");
+    for (int i = 0; i < cpu1_queue.count; i++) {
+        printf("%s", cpu1_queue.processes[i].name);
+        if (i < cpu1_queue.count - 1) {
+            printf("->");
+        }
+        if (i == cpu1_queue.count - 1) {
+            printf("\n");
+	}
+	
     return 0;
 }
 
