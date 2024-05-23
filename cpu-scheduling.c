@@ -26,6 +26,35 @@ typedef struct {
     int count;
 } ProcessQueue;
 
+void printSJF(FILE *output_file, ProcessQueue *queue) {
+    for (int i = 0; i < queue->count; i++) {
+        fprintf(output_file, "Process %s is placed in the SJF queue to be assigned to CPU-2\n", queue->processes[i].name);
+        fprintf(output_file, "Process %s is assigned to CPU-2.\n", queue->processes[i].name);
+        fprintf(output_file, "Process %s is completed and terminated.\n\n", queue->processes[i].name);
+    }
+}
+
+void executeSJF(FILE *output_file, ProcessQueue *destination, ProcessQueue *queue) {
+    for (int i = 0; i < queue->count; i++) {
+        temp[i] = queue->processes[i];
+    }
+    for (int i = 0; i < queue->count - 1; i++) {
+        for (int j = i + 1; j < queue->count; j++) {
+            if (temp[j].arrival_time <= temp[i].arrival_time && temp[j].burst_time < temp[i].burst_time) {
+                Process swap = temp[i];
+                temp[i] = temp[j];
+                temp[j] = swap;
+            }
+        }
+    }
+    for (int i = 0; i < queue->count; i++) {
+        enqueue(destination, temp[i]);
+        elapsed_time += temp[i].burst_time;
+    }
+
+    printSJF(output_file, destination);
+}
+
 void ExecuteFCFS(ProcessQueue *cpu1_queue, FILE *output_file) {
     for (int i = 0; i < cpu1_queue->count; i++) {
         if (cpu1_queue->processes[i].ram_required <= CPU1_RAM_SIZE) {
