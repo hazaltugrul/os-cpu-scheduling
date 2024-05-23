@@ -26,6 +26,23 @@ typedef struct {
     int count;
 } ProcessQueue;
 
+void removeFromQueue(ProcessQueue *queue, char *name) {
+    int found = 0;
+    for (int i = 0; i < queue->count; i++) {
+        if (strcmp(queue->processes[i].name, name) == 0) {
+            found = 1;
+            for (int j = i; j < queue->count - 1; j++) {
+                queue->processes[j] = queue->processes[j + 1];
+            }
+            queue->count--;
+            break; 
+        }
+    }
+    if (!found) {
+        printf("Error: Process '%s' not found in the queue.\n",name);
+}
+}
+
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {
@@ -68,3 +85,4 @@ int main(int argc, char *argv[]) {
     fclose(input_file);
     return 0;
 }
+
