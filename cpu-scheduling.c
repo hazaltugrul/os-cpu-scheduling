@@ -26,6 +26,15 @@ typedef struct {
     int count;
 } ProcessQueue;
 
+void ExecuteFCFS(ProcessQueue *cpu1_queue, FILE *output_file) {
+    for (int i = 0; i < cpu1_queue->count; i++) {
+        if (cpu1_queue->processes[i].ram_required <= CPU1_RAM_SIZE) {
+            fprintf(output_file, "Process %s is queued to be assigned to CPU-1.\n", cpu1_queue->processes[i].name);
+            fprintf(output_file, "Process %s is assigned to CPU-1.\n", cpu1_queue->processes[i].name);
+            fprintf(output_file, "Process %s is completed and terminated.\n\n", cpu1_queue->processes[i].name);
+ }
+}
+
 void removeFromQueue(ProcessQueue *queue, char *name) {
     int found = 0;
     for (int i = 0; i < queue->count; i++) {
